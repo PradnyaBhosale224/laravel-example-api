@@ -3,11 +3,11 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
-use App\Http\Controllers\ClusterController;
 use App\Http\Controllers\StudentFormController;
 use App\Http\Controllers\ImgUploadController;
 use App\Http\Controllers\CSVImportController;
 use App\Http\Controllers\ExportController;
+use App\Http\Controllers\ConversationController;
 
 
 Route::get('/user', function (Request $request) {
@@ -42,3 +42,6 @@ Route::post('/import-csv', [CSVImportController::class, 'importCSV']);
 //exportcsv
 Route::get('/export-csv', [ExportController::class, 'exportProducts']);
 Route::post('/export-product', [ExportController::class, 'exportProductById']);
+
+//complex query controller
+Route::post('/conversation', [ConversationController::class, 'fetchConversation']);

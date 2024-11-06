@@ -12,14 +12,15 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
-        $posts = Post::get();
-        return response()->json([
-            'message'=>'List of post',
-            'posts'=> $posts
-        ],200);
+        // Number of items per page; default is 15 if not provided
+        $perPage = $request->input('per_page', 2);
+
+        // Fetch paginated data
+        $posts = Post::simplePaginate($perPage);
+
+        return response()->json($posts);
     }
 
     public function createPost(Request $request)
