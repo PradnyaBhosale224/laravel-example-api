@@ -9,31 +9,33 @@
 
     class AuthController extends Controller
     {
+        protected $fields = [
+            "user_id","name", "email","password","role", "password_confirmation","role","is_active"
+        ];
+    
         // Register method
         public function register(Request $request)
         {   
-            $validator = Validator::make($request->all(), [
+            $dataArray = $request->only($this->fields);
+            $validator = Validator::make($dataArray, [
                 'name' => 'required|string|max:255',
                 'email' => 'required|string|email|max:255|unique:users',
                 'password' => 'required|string|min:6|confirmed',
+                'role' => 'required|string|max:255',
             ]);
-
+           
             if ($validator->fails()) {
                 return response()->json(['errors' => $validator->errors()], 400);
             }
-            //echo "Hi";
-            // Create user
-            $user = User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-            ]);
-
+            
+            $userModel = new User();
+            $form = $userModel->register($dataArray);
+           
             // Generate a token for the user
-            $token = $user->createToken('API Token')->plainTextToken;
+            $token = $form->createToken('API Token')->plainTextToken;
 
             return response()->json([
-                'user' => $user,
+                'user' => $form,
                 'token' => $token,
             ], 201);
         }

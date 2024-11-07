@@ -9,8 +9,7 @@ class AdminController extends Controller
 {
     public function adminDashboard(Request $request)
     {
-        echo "Hi";
-        if (!Gate::allows('user')) {
+        if (!Gate::allows('admin')) {
             return response()->json(['message' => 'Access denied'], 403);
         }
 
