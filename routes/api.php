@@ -8,6 +8,9 @@ use App\Http\Controllers\ImgUploadController;
 use App\Http\Controllers\CSVImportController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\ConversationController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\RegistrationController;
+use App\Http\Controllers\AdminController;
 
 
 Route::get('/user', function (Request $request) {
@@ -45,3 +48,12 @@ Route::post('/export-product', [ExportController::class, 'exportProductById']);
 
 //complex query controller
 Route::post('/conversation', [ConversationController::class, 'fetchConversation']);
+
+Route::prefix('auth')->group(function () {
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
+});
+
+
+Route::middleware(['auth:sanctum'])->get('/admin-dashboard', [AdminController::class, 'adminDashboard']);
